@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/p/layout.xhtml">
+	<ui:define name="content">
+		<h:form
+			onkeypress="if (event.keyCode == 13) { document.getElementById('enterKey').click(); return false; }"
+			id="viewdeals" process="@this" prependId="false">
+			<div class="row">
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+					<div class="login_serch_box">
+						<div class="input-group">
+							<h:inputText class="form-control" id="txtsrch"
+								value="#{ordersBean.keyWord}" tabindex="1" />
+							<p:watermark for="txtsrch"
+								value="Search by Ref No / Customer Name / Mobile" />
+							<div class="input-group-btn">
+								<h:commandLink id="enterKey"
+									class="btn btn-default btn-default_color-bg"
+									action="#{ordersBean.searchByKeyWord}">
+									<i class="glyphicon glyphicon-search"></i>
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class=" table_box">
+				<div class="table table-responsive">
+					<p:dataTable value="#{ordersBean.dealOrdersList}" var="it"
+						paginator="true" rows="10" paginatorPosition="bottom"
+						paginatorAlwaysVisible="false" rowIndexVar="idx"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15,20">
+						<p:column headerText="SI.No" styleClass="ftj-center">
+							<h:outputText value="#{idx+1}" />
+						</p:column>
+						<p:column headerText="Order #" styleClass="ftj-center"
+							sortBy="#{it.orderId}">
+							<p:commandLink style="color:gray;"
+								update=":viewdeals:orderDetailsViewId"
+								oncomplete="PF('OrderDetails').show()" value="#{it.orderId}"
+								id="orderDetailsId" action="#{ordersBean.showOrderDetails}">
+								<f:setPropertyActionListener
+									target="#{ordersBean.orderDetailsId}" value="#{it.orderId}" />
+							</p:commandLink>
+						</p:column>
+						<p:column headerText="Date &amp; Time"
+							sortBy="#{it.dealordersdate}">
+							<h:outputText value="#{it.dealordersdate}" converter="SDC" />
+						</p:column>
+						<p:column headerText="Customer" sortBy="#{it.customer.firstName}">
+							<h:outputText
+								value="#{it.customer.firstName} #{it.customer.lastName}" />
+						</p:column>
+						<p:column headerText="Emai ID" sortBy="#{it.customer.firstName}"
+							width="17%">
+							<h:outputText value="#{it.customer.email}" />
+						</p:column>
+						<p:column headerText="Mobile No."
+							sortBy="#{it.customer.mobileNumber}">
+							<h:outputText value="#{it.customer.mobileNumber}" />
+						</p:column>
+						<p:column headerText="Total Amount" sortBy="#{it.amount}">
+							<p style="text-align: right !important;">
+								<h:outputText value="#{it.amount}">
+									<f:convertNumber pattern="#0.00" />
+								</h:outputText>
+							</p>
+						</p:column>
+						<p:column headerText="Status">
+							<p:spacer width="5" />
+							<p:spacer width="5" />
+							<p:commandLink style="color:red;"
+								rendered="#{!it.deliveryStatus}"
+								oncomplete="PF('DeliverConfirm').show()" value="PENDING"
+								id="Delete">
+								<f:setPropertyActionListener target="#{ordersBean.orderId}"
+									value="#{it.id}" />
+								<f:setPropertyActionListener
+									target="#{ordersBean.deliveryStatus}"
+									value="#{it.deliveryStatus}" />
+							</p:commandLink>
+							<p:commandLink style="color:green;"
+								rendered="#{it.deliveryStatus}"
+								oncomplete="PF('DeliverConfirm').show()" value="DELIVERED"
+								id="DELIVERED">
+								<f:setPropertyActionListener target="#{ordersBean.orderId}"
+									value="#{it.id}" />
+								<f:setPropertyActionListener
+									target="#{ordersBean.deliveryStatus}"
+									value="#{it.deliveryStatus}" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			<h:panelGroup id="orderDetailsViewId">
+				<p:dialog header="Order Details" draggable="true" modal="true"
+					closable="false" width="700" widgetVar="OrderDetails"
+					showEffect="slide" hideEffect="slide" closeOnEscape="true"
+					resizable="false">
+					<h:form>
+						<p:outputPanel process="@this">
+							<div>
+								<p:scrollPanel style="width:650px;height:500px">
+									<h:panelGrid columns="2" cellpadding="5">
+										<h:outputText value="Order ID:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.order_id}"
+											style="font-weight: bold" />
+										<h:outputText value="Deal Order Date:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.dealordersdate}"
+											style="font-weight: bold" />
+										<h:outputText value="Bank Transaction ID:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.bank_transcation_id}"
+											style="font-weight: bold" />
+										<h:outputText value="Bank Transaction Status:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.order_status}"
+											style="font-weight: bold" />
+										<h:outputText value="Customer Name:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.first_name}"
+											style="font-weight: bold" />
+										<h:outputText value="Customer Mobile No:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.customer_mobileno}"
+											style="font-weight: bold" />
+										<h:outputText value="Customer Email ID:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.customer_email}"
+											style="font-weight: bold" />
+										<h:outputText value="Delivery Address:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.delivery_address}"
+											style="font-weight: bold" />
+										<h:outputText value="Deal Name:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.dealname}"
+											style="font-weight: bold" />
+										<h:outputText value="Deal Details:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.dealdetails}"
+											style="font-weight: bold" />
+										<h:outputText value="Quantity:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.quantity}"
+											style="font-weight: bold" />
+										<h:outputText value="Amount:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.cost}"
+											style="font-weight: bold" />
+										<h:outputText value="Brand Name:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.brand_name}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Name:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.branch_name}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Address:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.outlet_address}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Contact No:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.outlet_mobileno}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Alt Contact No1:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.alt_mobile_number_one}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Alt Contact No2:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.alt_mobile_number_two}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Alt Contact No3:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.alt_mobile_number_three}"
+											style="font-weight: bold" />
+										<h:outputText value="City Name:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.city_name}"
+											style="font-weight: bold" />
+										<h:outputText value="Location Name:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.location_name}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Email:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.outlet_email}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Alt Email1:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.alt_email_one}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Alt Email2:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.alt_email_two}"
+											style="font-weight: bold" />
+										<h:outputText value="Outlet Alt Email3:" />
+										<h:outputText
+											value="#{ordersBean.orderDetailsCustomHBMDto.alt_email_three}"
+											style="font-weight: bold" />
+										<h:outputText value="Tax Details:" />
+										<h:outputText value="**" style="font-weight: bold" />
+									</h:panelGrid>
+								</p:scrollPanel>
+							</div>
+							<br></br>
+							<div align='right'>
+								<p:commandButton value="Close"
+									style="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important;"
+									oncomplete="PF('OrderDetails').hide()" />
+							</div>
+						</p:outputPanel>
+					</h:form>
+				</p:dialog>
+			</h:panelGroup>
+		</h:form>
+		<p:dialog header="Delivery Service Confirmation " draggable="false"
+			modal="true" closable="true" width="450" widgetVar="DeliverConfirm"
+			showEffect="slide" hideEffect="slide" closeOnEscape="true"
+			resizable="false">
+			<h:form id="DLGG">
+				<h:outputText value="Do you want to change Delivery status?" />
+				<p:spacer width="5px" />
+				<h:selectOneMenu value="#{ordersBean.deliveryStatus}"
+					class="brand_drodown_box">
+					<f:selectItem itemLabel="DELIVERED" itemValue="true" />
+					<f:selectItem itemLabel="PENDING" itemValue="false" />
+				</h:selectOneMenu>
+				<p:spacer height="25px" />
+				<div style="right: 0px;">
+					<p:commandButton ajax="false" value="Yes"
+						style="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important;"
+						actionListener="#{ordersBean.deliverDeal}">
+					</p:commandButton>
+					<p:spacer width="5px" />
+					<p:commandButton value="No"
+						style="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important;"
+						oncomplete="PF('DeliverConfirm').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

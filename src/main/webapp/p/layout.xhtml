@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>HB Merchant</title>
+
+<link href="#{request.contextPath}/css/style.css" rel="stylesheet" type="text/css" />
+<link href="#{request.contextPath}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link href="#{request.contextPath}/css/theme.css" rel="stylesheet" type="text/css" />
+<script src="#{request.contextPath}/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="#{request.contextPath}/js/validate.js" type="text/javascript"></script>
+<script src="#{request.contextPath}/js/validate.js" type="text/javascript"></script> 
+<script>
+$(document).ready(function(){
+  $("#CHANGE_PASSWORD").click(function(){
+    $("#passwordDIV").toggle();
+  });
+
+  $('#choooseBrandCat').change(function(){
+	   $("#SANDHANAPANDIANRR").click();
+   });
+  $('#chooose').change(function(){
+	   $("#SANDHANAPANDIANRR").click();
+  });
+  
+}); 
+</script>
+</h:head>
+
+<h:body>	
+<f:view>
+<div role="navigation"  class="navbar navbar-inverse navbar-fixed-top header-noz-index"  >
+
+		<div class="container" >
+			
+			<nav class="navbar " role="navigation">
+				
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+							<span class="sr-only">Toggle navigation</span> 
+							<span class="icon-bar"></span> 
+							<span class="icon-bar"></span> 
+							<span class="icon-bar"></span>
+						</button>
+						<h5>Need Help? Please Ring : <span class="glyphicon glyphicon-earphone"></span>     +918088002288</h5>
+					</div>
+					
+					
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+					
+						<li>
+						<h:form id="ABCDEF" prependId="false">
+							<h:selectOneMenu styleClass="header-form-control" id="choooseBrandCat" value="#{profileBean.selectedMerchant}" rendered="#{not empty profileBean.userInfo.merchant}"  converter="gec"> 
+								 <p:ajax event="change" listener="#{profileBean.homeBoardListener}" />
+								<f:selectItems var="at" itemLabel="#{at.name}" itemValue="#{at}"  value="#{profileBean.userInfo.merchant}"/>
+							</h:selectOneMenu>
+							</h:form> 
+						</li>
+						<li><div class="pull-left" style="margin: 4px -2px 0 4px">
+								<a href="#"><span class="glyphicon glyphicon-user"></span> </a>
+							</div>
+							<p:commandLink oncomplete="PF('DataFetchingConfirm').show()" styleClass="pull-left" immediate="true" update=":LOGOUT"
+								value="My Profile" >
+								<f:setPropertyActionListener target="#{profileBean.loginRequest.passWord}" value=""/> 
+								</p:commandLink></li>
+						<li><div class="pull-left" style="margin: 4px -2px 0 4px">
+								<a href="#"><span class="glyphicon glyphicon-off"></span></a>
+							</div>
+							<p:commandLink oncomplete="PF('LogoutConfirm').show()" styleClass="pull-left" immediate="true" update=":LOGOUT"
+								value="Logout" /></li>
+					</ul>
+				</div>
+					
+				
+			</nav>
+			
+			
+			
+		</div>
+	</div>
+	
+	<div id="main-nav" class=" bs-docs-nav fixed header1" role="banner">
+		<div class="container">
+		<h:form id="layoutFORM" prependId="false">
+		 
+		<h:commandLink id="SANDHANAPANDIANRR" value=""   action="#{profileBean.getHomeBoard}" immediate="true" >
+			<div class="logo">
+				<img src="#{request.contextPath}/images/logo.png" border="0" />
+			</div>
+		<f:setPropertyActionListener target="#{dealBean.style}" value="HOME"/>
+		<f:setPropertyActionListener value="ad" target="#{profileBean.view}" /> 
+		</h:commandLink>
+			
+			<div class="navi_box">
+			
+			
+	
+			<div class="navi">
+					<ul>
+					  
+						<li id="ADHighlight" > 
+							<h:commandLink id="TestCommandLink" value="" styleClass="#{dealBean.style eq 'ADVERTISEMENT'?'active':'' }" action="#{contentBean.showContents}" immediate="true" >
+								<div class="ads_icon">
+									<div class="navi-text">Content</div>
+								</div> 
+								<f:setPropertyActionListener target="#{dealBean.style}" value="ADVERTISEMENT"/> 
+							</h:commandLink>
+						</li> 
+						
+						
+						<li id="DealHighlight"> 
+							<h:commandLink value="" styleClass="#{dealBean.style eq 'BUYOUT'?'active':'' }" action="#{dealBean.showDeals}" immediate="true" >
+							<div class="deal_icon">
+								<div class="navi-text">Deals</div>
+							</div>
+								<f:setPropertyActionListener target="#{dealBean.contentType}" value="BUYOUT"/>
+								<f:setPropertyActionListener target="#{dealBean.style}" value="BUYOUT"/>
+							</h:commandLink>
+						</li>						
+						
+						
+						<li id="PROMOHighlight"> 
+							<h:commandLink value="" styleClass="#{dealBean.style eq 'PROMOTION'?'active':'' }"   action="#{dealBean.showDeals}" immediate="true" >
+							<div class="promo_icon">
+								<div class="navi-text">Coupons</div>
+							</div>
+								<f:setPropertyActionListener target="#{dealBean.contentType}" value="PROMOTION"/>
+								<f:setPropertyActionListener target="#{dealBean.style}" value="PROMOTION"/>
+							</h:commandLink>
+						</li>
+						
+
+						<li> 
+							<h:commandLink value="" styleClass="#{dealBean.style eq 'ORDERS'?'active':'' }"  action="#{ordersBean.showOrders}" immediate="true" >
+								<div class="order_icon">
+									<div class="navi-text">Orders</div>
+								</div>
+								<f:setPropertyActionListener target="#{dealBean.style}" value="ORDERS"/>
+							</h:commandLink>
+						</li>
+						<li>  
+							<h:commandLink value=""  styleClass="#{dealBean.style eq 'Reports'?'active':'' }"  action="#{reportBean.showReport}" immediate="true" >
+								<div class="report_icon">
+									<div class="navi-text">Reports</div>
+								</div>
+								<f:setPropertyActionListener target="#{dealBean.style}" value="Reports"/>
+								<f:setPropertyActionListener value="ad" target="#{profileBean.view}" /> 
+							</h:commandLink>
+						</li>
+						
+					</ul>
+				</div>
+	
+				<div class="restaurant_logo">
+					<p:outputPanel rendered="#{profileBean.display}">
+						<img src="#{request.contextPath}/images/half-image-placeholder.jpg" height="63px" width="228px;"  border="0" />
+					</p:outputPanel>
+					<p:outputPanel rendered="#{!profileBean.display}">
+						<img  height="63px" width="228px;" src="#{profileBean.path}/images/merchant/MERCHANT_#{profileBean.merchantId}.png"  border="0" />
+					</p:outputPanel>
+					
+				</div>
+			</div>
+			</h:form>
+		</div>
+	</div> 
+	<div class="container  table_box">
+	 <!--content panel starts here-->
+            <div id="hb-contentpannel">
+            	<ui:insert name="content"/>
+            </div>
+            
+            <!--content panel ends up-->
+	</div>
+	
+  <div id="content-Footer" >
+	     <div class="footer">
+      <div class="container">
+        <p class="footer_text"><span class="f_text"><a href="#"> Privacy Policy</a></span> | <span class="f_text"><a href="#">Terms of Service </a></span> | © 2014 Hungry Bells. All Rights Reserved.</p>
+      </div>
+    </div>
+
+    
+    </div>
+	
+	 <p:dialog header="Choose Brand" draggable="false" modal="true"
+			closable="false" width="390" height="250" widgetVar="BRANDCHOOSEDIALOG"
+			showEffect="slide" hideEffect="slide" closeOnEscape="false"
+			resizable="false">
+			<p:outputPanel id="punda" rendered="#{not empty profileBean.userInfo.merchant}">
+			<h:form id="BrandChooseDLG_FORM"> 
+			<h:outputText value="Choose Brand to Continue."  /> 
+			<h:selectOneMenu styleClass="form-control" id="chooose" value="#{profileBean.selectedMerchant}" converter="gec"> 
+				<p:ajax event="change" listener="#{profileBean.homeBoardListener}" />
+				<f:selectItems var="at" itemLabel="#{at.name}" itemValue="#{at}"  value="#{profileBean.userInfo.merchant}"/>
+			</h:selectOneMenu> 
+			<p:message for="chooose" />
+			<p:commandButton ajax="false"
+				style="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important; "
+				value="Continue" actionListener="#{profileBean.chooseBrand}" clientValidate="true"
+				oncomplete="handleChooseBrandRequest(xhr, status, args)" />
+			</h:form>
+			</p:outputPanel>
+			<p:outputPanel id="LayoutPanelMerchantList" rendered="#{empty profileBean.userInfo.merchant}">
+			No Brand Access
+			</p:outputPanel>
+		</p:dialog>
+		 <p:dialog header="Logout Confirmation" draggable="false" modal="true"
+			closable="false" width="390" widgetVar="LogoutConfirm"
+			showEffect="slide" hideEffect="slide" closeOnEscape="true"
+			resizable="false">
+			<h:form id="LOGOUT">
+				
+				<h:outputText value="Do you want to Logout ?"  />
+			
+				<p:spacer width="5px" />
+				<p:commandButton value="Yes"  style ="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important;" onclick="javascript:location.href = '#{request.contextPath}/logout';" /> 
+				<p:spacer width="5px" />
+				<p:commandButton value="No"  style ="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important;" oncomplete="PF('LogoutConfirm').hide()" />
+			</h:form>
+		</p:dialog>
+		  <p:dialog header="My Profile" draggable="false" modal="true"
+			closable="true" width="390" widgetVar="DataFetchingConfirm"
+			 closeOnEscape="true"
+			resizable="false" >
+			<h:form id="PREKG">
+			<p:growl id="sandhanpandian" showDetail="false" globalOnly="true"/>
+				<br /> 
+				<p:outputPanel id="documentPanel">
+					<div>
+						<center>
+							<p:outputPanel rendered="#{profileBean.display}">
+								<img
+									src="#{request.contextPath}/images/half-image-placeholder.jpg"
+									height="63px" width="228px;" border="0" />
+							</p:outputPanel>
+							<p:outputPanel rendered="#{!profileBean.display}">
+								<img height="63px" width="228px;"
+									src="#{profileBean.path}/images/merchant/MERCHANT_#{profileBean.merchantId}.png"
+									border="0" />
+							</p:outputPanel>
+									</center>
+								</div>
+								<br />
+								<p>
+									<span style="font-weight: bold; padding-right: 10px;">Merchant Name - </span>
+									<span>#{profileBean.merchantDetails.name}</span>
+								</p>
+								<p>
+									<span style="font-weight: bold; padding-right: 10px;">Merchant Category - </span>
+									<span>#{profileBean.merchantCat}</span>
+								</p>
+								<p>
+									<span style="font-weight: bold; padding-right: 10px;">Merchant Speciality - </span><span>#{profileBean.merchantSpec}</span>
+								</p>
+								<p>
+									<span style="font-weight: bold; padding-right: 10px;">Email Id - </span>
+									<span>#{profileBean.eMail}</span>
+								</p>
+								<p>
+								<a id="CHANGE_PASSWORD" href="#" style="text-decoration:none;color:red;font-weight: bold; padding-right: 10px;">Change Password</a>
+								</p>
+								<div id="passwordDIV" style="display:none;">
+									<p>
+										<span style="font-weight: bold; padding-right: 10px;">Password 
+										</span>
+										<p:password type="password" styleClass="form-control"
+											id="reset_password" placeholder="Password" label="password"
+											autocomplete="off" required="true"
+											value="#{profileBean.loginRequest.passWord}"
+											requiredMessage="Please fill password feild"
+											validatorMessage="Password must contains one lowercase, one uppercase and one number">
+											<f:validateRegex pattern="#{val['pattern.password']}"></f:validateRegex>
+										</p:password>
+										<p:message id="sdfsd" for="reset_password" />
+									</p>
+			
+									<div style="float: right;">
+										<br />
+										<p:commandButton ajax="true"
+											style="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important; "
+											value="Save" update=":PREKG:sdfsd :PREKG:sandhanpandian"
+											actionListener="#{profileBean.login}" clientValidate="true"
+											oncomplete="handleLoginRequest(xhr, status, args)" />
+										<p:spacer width="5px" />
+										<p:commandButton value="Cancel"
+											style="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important; "
+											oncomplete="PF('DataFetchingConfirm').hide()" />
+									</div>
+								</div>
+							</p:outputPanel> 
+			</h:form>
+		</p:dialog>
+		</f:view>
+		<script type="text/javascript">
+    function handleLoginRequest(xhr, status, args) {
+        if(args.validationFailed || !args.loggedIn) { 
+        }
+        else {
+            PF('DataFetchingConfirm').hide(); 
+            $('#loginLink').fadeOut();
+        }
+    }
+    function handleChooseBrandRequest(xhr, status, args) {
+        if(args.validationFailed || !args.choosen) { 
+        }
+        else {
+            PF('BRANDCHOOSEDIALOG').hide(); 
+        }
+    }
+</script>
+</h:body>
+</html>

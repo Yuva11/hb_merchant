@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/p/layout.xhtml">
+	<ui:define name="content"> 
+	 
+	<p:growl/>
+	<h:form  onkeypress="if (event.keyCode == 13) { document.getElementById('viewcontents:enterKey').click(); return false; }"  id="viewcontents" >
+	<h:inputHidden value="#{contentBean.locationSize}" id="LocationSize"/> 
+				<div class="row"> 
+					<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+						<div class="login_serch_box">
+							<div class="input-group">
+							<h:inputText class="form-control" id="txtsrch" value="#{contentBean.keyWord}" tabindex="1"/>
+                            <p:watermark for="txtsrch" value="Search by Name"/>
+								<div class="input-group-btn"> 
+									<h:commandLink id="enterKey" class="btn btn-default btn-default_color-bg"  action="#{contentBean.searchByKeyWord}">
+										<i class="glyphicon glyphicon-search"></i>
+									</h:commandLink> 
+								</div>
+							</div>
+						</div>
+					</div> 
+					<div class="col-sm-2"></div>
+
+					<div class="col-sm-6" >
+						<div class="add_button"> 
+							<h:commandLink   action="#{contentBean.showAdd}" immediate="true" > 
+								<img src="#{request.contextPath}/images/add-button.png" /> 
+							</h:commandLink> 
+						</div>
+					 </div>
+
+				</div>
+			
+			<div class="row"> 
+			
+			<div class="col-lg-12">
+			
+		<div class=" table_box">
+			<div class="table-responsive">
+				<p:dataTable value="#{contentBean.dealDTOList}" var="it" 
+				 paginator="true" rows="20" paginatorPosition="bottom" paginatorAlwaysVisible="false" rowIndexVar="idx" 
+					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="20,50,100,500">
+					<p:column headerText="SI.No" styleClass="ftj-center" style="width:70px;">
+						<h:outputText value="#{idx+1}" />
+					</p:column>
+					<p:column headerText="Ad Name &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  " styleClass="ftj-center" sortBy="#{it.name}" >
+						<h:outputText value="#{it.name}" />
+					</p:column>
+					<p:column headerText="Merchant &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " styleClass="ftj-center" sortBy="#{it.merchant.name}" >
+						<h:outputText value="#{it.merchant.name}" />
+					</p:column> 
+					<p:column headerText="Content Template &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " styleClass="ftj-center">
+						<h:outputText value="#{it.contentTemplate eq 'TEXT_ONLY' ?'Text &amp; Text':it.contentTemplate eq 'IMAGE_ONLY'?'Image Only':it.contentTemplate eq 'IMAGE_AND_TEXT'?'Image &amp; Text':'Video &amp; Text' }"/>
+					</p:column> 
+					 <p:column headerText="Content Type &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; " styleClass="ftj-center">
+						<h:outputText value="#{it.contentType}" />
+					</p:column>  
+					 <p:column headerText="Validity Start Date" styleClass="ftj-center" sortBy="#{it.startDate}" >
+						<h:outputText value="#{it.startDate}" converter="STC"> </h:outputText>
+					</p:column>  
+					 <p:column headerText="Validity End Date" styleClass="ftj-center" sortBy="#{it.endDate}" > 
+						<h:outputText value="#{it.endDate}" converter="STC" ></h:outputText> 
+					</p:column>  
+					<p:column headerText="Status &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " styleClass="ftj-center" sortBy="#{it.status}" > 
+						<h:outputText value="#{it.status}"></h:outputText> 
+					</p:column> 
+					<p:column headerText="Action &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; " style="text-align:center;">
+						<h:commandLink   action="#{contentBean.showLocations}" id="locationspublish">
+						<img src="#{request.contextPath}/images/publish.png" title="Publish" alt="Publish" border="0" />
+			                <f:setPropertyActionListener   value="#{it}" target="#{contentBean.selectedDeal}" />
+			                <f:setPropertyActionListener   value="#{it.location}" target="#{contentBean.loc}" />
+			            </h:commandLink>
+			            
+						<p:spacer width="10"/>
+						<h:commandLink action="#{contentBean.showEdit}" id="Edit"> 
+							<img src="#{request.contextPath}/images/edit-small-icon.png" title="Edit" alt="Edit" border="0" />
+							<f:setPropertyActionListener target="#{contentBean.selectedDealDTO}"  converter="gec" value="#{it}"/>
+							</h:commandLink>  
+					</p:column> 
+				</p:dataTable>
+			</div>		
+		</div>
+		 
+		</div>
+		</div> 
+		</h:form>
+		 <script> 
+		   function checkAll(){ 
+				var x = document.getElementById("viewcontents:LocationSize").value;  
+				
+				if($("#selectall").is(":checked")){
+					
+					for(var i = 0; i &lt; x; i++) { 
+						var id="viewcontents:grid:"+i; 
+						alert(PrimeFaces.escapeClientId(id));
+						$("#viewcontents\\:grid\\:0").prop('checked', true); 
+					}
+	        	   	
+	       	   	}   
+			}
+	 </script>
+		
+</ui:define>
+</ui:composition>

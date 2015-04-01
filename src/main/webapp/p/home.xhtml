@@ -1,0 +1,379 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	template="/p/layout.xhtml">
+	<ui:define name="content">
+	 
+	
+	<h:form id="home" prependId="false"> 
+	
+ <p:outputPanel id="AD_DASHBOARD" rendered="#{profileBean.view eq 'ad'}">
+	<div id="Ad_Dash"> 
+			<div class="row nav_bottom "> 
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="box_small">
+						<div class="contant_line_box"> 
+							<div class="contant_small_text">DashBoard</div> 
+						</div>
+						<div class="right-triangle"></div>
+						<div class="contant_small_text1">CONTENT</div>
+					</div> 
+				</div> 
+			</div>
+			<div class=" table_box">
+			<div class="table-responsive" >
+			<p:dataList id="homeId" value="#{profileBean.dashBoardAdList}" var="it" type="definition" styleClass="editor-content"> 
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					<div class="dashboard_box">
+						<div class="row">
+							<div class="col-lg-3 col-md-3">
+								<div class="thumb_box">  
+			  						 <div style="width:94%;margin: 3%; background-color:##{profileBean.bg_color}; height: 90%">
+				  						<p:outputPanel id="THUMBNAILIMAGE" rendered="#{it.contentTemplate ne 'TEXT_ONLY'}">  
+					  						<img src="#{profileBean.path}/images/merchant/deal/THUMBNAIL_#{profileBean.merchantId}_#{it.id}.png" width="100%;" height="136px;" /> 
+										</p:outputPanel>
+										<p:outputPanel id="THUMBNAILIMAGETEXTID" rendered="#{it.contentTemplate eq 'TEXT_ONLY'}">
+											<p style="text-align:center !important;padding-top:1%;color:##{profileBean.text_color};font-size:#{profileBean.font_size}px;font-family:#{profileBean.font};">
+												<h:outputText id="ThumbnailTextPreview"  value="#{it.thumbnailText}"  rendered="#{it.contentTemplate eq 'TEXT_ONLY'}" />
+											</p>
+										</p:outputPanel>
+										<p:outputPanel id="ThumbTe"  rendered="#{it.contentTemplate eq 'IMAGE_AND_TEXT' or it.contentTemplate eq 'VIDEO_AND_TEXT'}">
+											<div class="dashboard_thumb_box"> 
+												<p style="padding-left:7px;">
+													<h:outputText id="PREview"  styleClass="thumbtext" value="#{it.thumbnailText}" rendered="#{it.contentTemplate eq 'IMAGE_AND_TEXT' or it.contentTemplate eq 'VIDEO_AND_TEXT' }" />
+												</p> 
+											</div>
+										</p:outputPanel>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-3 col-md-3">
+								<div class="dash_box">
+									<div class="follow_box">
+										<div class="like_text1">#{it.likeCount}</div>
+										<div class="like_follw_box">
+											LIKES<br /> <span class="glyphicon glyphicon-thumbs-up"
+												style="font-size: 20px;color:#6e6e6e;"></span>
+										</div> 
+						            
+									</div>
+									<div class="follow_box1">
+										<div class="like_text">#{it.feedBackCount}</div>
+										<div class="like_follw_box">
+											FEEDBACKS<br /> <span class="glyphicon glyphicon-comment"
+												style="font-size: 20px;color:#6e6e6e; "></span>
+										</div>
+									</div>
+									 <div class="follow_box2">
+										<div class="like_text1">#{it.viewCount}</div>
+										<div class="like_follw_box">
+											Viewed CustomerR <br /> <span class="glyphicon glyphicon-thumbs-up"
+												style="font-size: 20px;color:#6e6e6e;"></span>
+										</div> 
+						            
+									</div>
+									<div class="follow_box3">
+										<div class="like_text">
+											<ui:param name="viewcount" value=" #{empty it.views  ? 0 : fn:length(it.views)}" />  
+								            <h:outputText value="#{viewcount}" /> 
+										</div>
+										 
+										<div class="like_follw_box">
+											Total Views<br /> <span class="glyphicon glyphicon-comment"
+												style="font-size: 20px;color:#6e6e6e; "></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6">
+								<div class="feed_comment">
+									<div class="dash_box1" style="border-bottom: solid 1px #cccccc">
+										<div class="feed_text">
+											<span class="glyphicon glyphicon-comment"></span> FeedBack
+										</div>
+									</div>
+									<p:outputPanel id="feedbackpanel" rendered="#{it.feedBackCount ne '0'}">
+									 <p:dataList value="#{it.feedbacks}"  var="car"  type="definition" paginator="false" rows="2">
+					    
+									<div class="dash_box1" style="border-bottom: solid 1px #ededed">
+										<div class="border_icon">
+											<span class="glyphicon glyphicon-user"></span>
+										</div>
+										<div class="feed_comment_text">
+											<span style="color: #ba1015;">#{car.customer.firstName}</span><p:spacer width="15px;" height="0px"/><span style="font-size:11px; ">on : #{car.postDate}</span> <br /> <span
+												class="coment_small_text">#{car.feedback}</span>
+										</div>
+										
+									</div> 
+					    </p:dataList>
+					    </p:outputPanel>
+					    <p:outputPanel id="feedbackpanelNone" rendered="#{it.feedBackCount eq '0'}">
+							<div  style="background:#fff;padding-top:75px !important;padding-left:25px !important;">  
+						  			<span  >No FeedBacks</span> 
+							</div>  
+					    </p:outputPanel>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+    </p:dataList>
+			 
+			</div>		
+		</div>
+	 </div>
+		</p:outputPanel>
+	<!-- DEAL -->
+	<p:outputPanel id="DEAL_DASHBOARD" rendered="#{profileBean.view eq 'deal'}">
+	<div id="Deal_Dash" > 
+	<div class="row  nav_bottom"> 
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="box_small">
+						<div class="contant_line_box"> 
+							<div class="contant_small_text">DashBoard</div> 
+						</div>
+						<div class="right-triangle"></div>
+						<div class="contant_small_text1">DEAL</div>
+					</div> 
+				</div> 
+			</div>
+			
+			
+			<div class=" table_box"> 	
+			    <div class="table-responsive">
+			      <table class="table table-bordered">
+				        <thead>
+				          <tr>
+				            <th>#<p:calendar id="event" value="#{profileBean.searchDate}" maxdate="#{profileBean.maxDate}">
+            <p:ajax event="dateSelect" listener="#{profileBean.onDateSelect}" update="DEAL_DASHBOARD" />
+        </p:calendar></th>
+				            <th style="width:50px !important;">Deal Name</th>
+				            <th>Customer Ratings</th>
+				            <th>Customer Reviews</th>
+				            <th>Deal Status</th>
+				            <th>Opening Qty</th>
+				            <th>Orders Received</th>
+				            <th>Served</th>
+				            <th>Pending</th>
+				            <th>Available Deal Qty</th>
+				            <th>Total Amount(INR)</th>
+				          </tr>
+				        </thead>
+				        <tbody>
+				        <p:outputPanel id="sdfgsdsdfg" rendered="#{not empty profileBean.dealDash.inventList}">
+	        				<p:dataList id="dealhomeId" value="#{profileBean.dealDash.inventList}" var="it" type="definition" styleClass="editor-content"> 
+								<tr>
+										<td><img src="#{profileBean.path}/images/merchant/deal/#{profileBean.merchantId}_#{it.dealinvent.id}.png" width="167px" height="100px;" /></td>
+							            <td> #{it.dealinvent.name}</td>
+							            <td><p:rating value="#{it.dealinvent.rating}" disabled="true"  stars="5"  /> </td>
+							            <td> Likes : #{it.dealinvent.likeCount}
+							            <br></br> FeedBacks : #{it.dealinvent.feedBackCount}
+							            <br></br> Customer's Viewed : #{it.dealinvent.viewCount}  
+							            <br></br> 
+							            <ui:param name="edit_title" value=" #{empty it.dealinvent.views  ? 0 : fn:length(it.dealinvent.views)}" />  
+							            <h:outputText value="Total Views : #{edit_title}" /> 
+							            </td>
+							            <td><p:outputPanel  rendered="#{it.openingQty - it.bookedQty eq '0'}"><div class="deal_soldout"> Sold Out</div></p:outputPanel>
+							            <p:outputPanel id="Avail" rendered="#{it.openingQty - it.bookedQty ne '0'}"><div  class="deal_available"> Available</div></p:outputPanel>
+							            </td>
+							            <td><p style="text-align:right !important;"> #{it.openingQty}</p></td>
+							            <td><p style="text-align:right !important;">#{it.bookedQty} </p></td>
+							            <td><p style="text-align:right !important;">#{it.dealinvent.served} </p></td>
+							            <td><p style="text-align:right !important;">#{it.dealinvent.pending} </p></td>
+							            <td><p style="text-align:right !important;">#{it.openingQty - it.bookedQty}</p></td>
+							            <td><p style="text-align:right !important;"><h:outputText value="#{it.dealinvent.totalAmount}"><f:convertNumber pattern="#0.00"  /></h:outputText></p></td>
+						        </tr>
+						    </p:dataList> 
+					          </p:outputPanel>
+					           <p:dataList id="dealhomeDealId" value="#{profileBean.dealDash.dealList}" var="it" type="definition" styleClass="editor-content">
+						           <tr> 
+			  							<td><img src="#{profileBean.path}/images/merchant/deal/#{profileBean.merchantId}_#{it.id}.png" width="167px" height="100px;"/></td>
+							            <td> #{it.name}</td>
+							            <td><p:rating value="#{it.rating}" disabled="true" stars="5" /> </td>
+							            <td> 
+							            Likes : #{it.likeCount}
+							            <br></br> FeedBacks : #{it.feedBackCount}
+							            <br></br> Customer's Viewed : #{it.viewCount}  
+							            <br></br> 
+							            <ui:param name="edit_title" value=" #{empty it.views  ? 0 : fn:length(it.views)}" />  
+							            <h:outputText value="Total Views : #{edit_title}" /> 
+							            </td>
+							            <td> <div  class="deal_available"> Available</div>  </td>
+							            <td><p style="text-align:right !important;"> #{it.openingQuantity}</p></td>
+							            <td><p style="text-align:right !important;">0 </p></td>
+							            <td><p style="text-align:right !important;">0 </p></td>
+							            <td><p style="text-align:right !important;">0 </p></td>
+							            <td><p style="text-align:right !important;">#{it.openingQuantity}</p></td>
+							            <td><p style="text-align:right !important;">0</p></td>
+								  </tr>
+						   	 </p:dataList> 
+					    </tbody>
+				  	</table>
+   				 </div>
+			</div>
+		  
+	</div>
+	
+	</p:outputPanel>
+	
+	
+	<!-- DEAL -->
+	<p:outputPanel id="PROMO_DASHBOARD" rendered="#{profileBean.view eq 'promo'}">
+	<div id="Promo_Dash" > 
+	<div class="row  nav_bottom"> 
+				<div class="col-lg-12 col-md-12 col-sm-12">
+					<div class="box_small">
+						<div class="contant_line_box"> 
+							<div class="contant_small_text">DashBoard</div> 
+						</div>
+						<div class="right-triangle"></div>
+						<div class="contant_small_text1">COUPONS</div>
+					</div> 
+				</div> 
+			</div>
+	<div class=" table_box">
+			<div class="table-responsive" >
+			<p:dataList id="promohomeId" value="#{profileBean.dashBoardPromoList}" var="it" type="definition" styleClass="editor-content"> 
+			<div class="row">
+				<div class="col-lg-12 col-md-12">
+					<div class="dashboard_box">
+						<div class="row">
+							<div class="col-lg-3 col-md-3">
+								<div class="thumb_box">  
+	  						 <div style="width:94%;margin: 3%; background-color:white;height: 90%"> 
+									<img src="#{profileBean.path}/images/merchant/deal/#{profileBean.merchantId}_#{it.id}.png" width="100%;" height="136px;" /> 
+							 </div>
+						</div>
+							</div>
+							<div class="col-lg-3 col-md-3">
+								<div class="dash_box">
+									<div class="follow_box">
+										<div class="like_text1">#{it.likeCount}</div>
+										<div class="like_follw_box">
+											LIKES<br /> <span class="glyphicon glyphicon-thumbs-up"
+												style="font-size: 20px;color:#6e6e6e;"></span>
+										</div> 
+						            
+									</div>
+									<div class="follow_box1">
+										<div class="like_text">#{it.feedBackCount}</div>
+										<div class="like_follw_box">
+											FEEDBACKS<br /> <span class="glyphicon glyphicon-comment"
+												style="font-size: 20px;color:#6e6e6e; "></span>
+										</div>
+									</div>
+									 <div class="follow_box2">
+										<div class="like_text1">#{it.viewCount}</div>
+										<div class="like_follw_box">
+											Viewed Customer <br /> <span class="glyphicon glyphicon-thumbs-up"
+												style="font-size: 20px;color:#6e6e6e;"></span>
+										</div> 
+						            
+									</div>
+									<div class="follow_box3">
+										<div class="like_text">
+											<ui:param name="viewcouponcount" value=" #{empty it.views  ? '0' : fn:length(it.views)}" />  
+								            <h:outputText value="#{viewcouponcount}" /> 
+										</div>
+										 
+										<div class="like_follw_box">
+											Total Views<br /> <span class="glyphicon glyphicon-comment"
+												style="font-size: 20px;color:#6e6e6e; "></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6">
+								<div class="feed_comment">
+									<div class="dash_box1" style="border-bottom: solid 1px #cccccc">
+										<div class="feed_text">
+											<span class="glyphicon glyphicon-comment"></span> FeedBack
+										</div>
+									</div>
+									<p:outputPanel id="feedbackpanel" rendered="#{it.feedBackCount ne '0'}">
+									 <p:dataList value="#{it.feedbacks}"  var="car"  type="definition" paginator="false" rows="2">
+					    
+									<div class="dash_box1" style="border-bottom: solid 1px #ededed">
+										<div class="border_icon">
+											<span class="glyphicon glyphicon-user"></span>
+										</div>
+										<div class="feed_comment_text">
+											<span style="color: #ba1015;">#{car.customer.firstName}</span><p:spacer width="15px;" height="0px"/><span style="font-size:11px; ">on : #{car.postDate}</span> <br /> <span
+												class="coment_small_text">#{car.feedback}</span>
+										</div>
+										
+									</div> 
+					    </p:dataList>
+					    </p:outputPanel>
+					    <p:outputPanel id="feedbackpanelNosdne" rendered="#{it.feedBackCount eq '0'}">
+							<div  style="background:#fff;padding-top:75px !important;padding-left:25px !important;">  
+						  			<span  >No FeedBacks</span> 
+							</div>  
+					    </p:outputPanel>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+    </p:dataList>
+			 
+			</div>		
+		</div>
+	</div>
+	
+	</p:outputPanel>
+	
+	
+	
+	<!-- LEFTSIDE Button FOR AD -->
+	
+	<div >
+		<p:commandLink id="DEAL_LEFT" value="" styleClass="deal_left_dashboard"  action="#{profileBean.getDealBoard}"  immediate="true" update="home" rendered="#{profileBean.view eq 'ad'}">
+		 <f:setPropertyActionListener value="deal" target="#{profileBean.view}" />
+		</p:commandLink> 
+	</div>
+	
+	<div  >
+		<p:commandLink id="PROMO_LEFT" value=""  styleClass="promo_left_dashboard"  action="#{profileBean.getPromoBoard}" immediate="true"  update="home" rendered="#{profileBean.view eq 'deal'}">
+		<f:setPropertyActionListener value="promo" target="#{profileBean.view}" /> 
+		</p:commandLink>
+	</div> 
+	<div  >
+		<p:commandLink id="AD_LEFT" value=""  styleClass="ad_left_dashboard"  action="#{profileBean.getContentBoard}" immediate="true"  update="home" rendered="#{profileBean.view eq 'promo'}">
+		<f:setPropertyActionListener value="ad" target="#{profileBean.view}" /> 
+		</p:commandLink>
+	</div>
+	<!-- RIGHTSIDE Button FOR DEAL --> 
+	
+	<div  >
+		<p:commandLink  id="AD_RIGHT" value=""  styleClass="ad_right_dashboard"  action="#{profileBean.getContentBoard}" immediate="true"  update="home" rendered="#{profileBean.view eq 'deal'}">
+		<f:setPropertyActionListener value="ad" target="#{profileBean.view}" /> 
+		</p:commandLink>
+	</div>
+	
+
+	<div >
+		<p:commandLink id="DEAL_RIGHT" value="" styleClass="deal_right_dashboard"  action="#{profileBean.getDealBoard}" immediate="true" update="home" rendered="#{profileBean.view eq 'promo'}">
+		 <f:setPropertyActionListener value="deal" target="#{profileBean.view}" />
+		</p:commandLink> 
+	</div>
+	
+	<!-- RIGHTSIDE Button FOR AD --> 
+	<div  >
+		<p:commandLink id="PROMO_RIGHT" value=""  styleClass="promo_right_dashboard"  action="#{profileBean.getPromoBoard}" immediate="true"  update="home" rendered="#{profileBean.view eq 'ad'}">
+		<f:setPropertyActionListener value="promo" target="#{profileBean.view}" /> 
+		</p:commandLink>
+	</div> 
+	</h:form>
+	
+</ui:define>
+
+</ui:composition>

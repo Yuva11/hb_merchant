@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/p/layout.xhtml">
+	
+	<ui:define name="content">
+	 <script> 
+		   $(document).ready(function(){
+			 var x = document.getElementById("CHECKBOXINDEX").value;  
+			 var id="grid\\:"+x
+			 if($("#"+id).is(":checked")){
+	            	$("#DELIVERY_DIV").show();
+	                //alert("Checkbox is checked.");
+	            }
+			 $('input[name="grid"]').click(function(){
+		            if($("#"+id).is(":checked")){
+		            	$("#DELIVERY_DIV").show();
+		                //alert("Checkbox is checked.");
+		            }else{
+		            	$("#DELIVERY_DIV").hide();
+		            	//alert("Checkbox is unchecked.");
+			            } 
+		        });
+			}); 
+	 </script>
+		<div class="creation_box">
+			<h:form id="deal" prependId="false" enctype="multipart/form-data">
+			 <h:inputHidden value="#{dealBean.deliverySize}" id="PANDIAN"/>
+			 <h:inputHidden value="#{dealBean.checkBoxIndex}" id="CHECKBOXINDEX"/>
+				<div class="col-lg-12 col-md-12">
+					<p:messages id="globalmessages" globalOnly="true" showDetail="false" />
+				</div> 
+				<div class="row field_row">
+					<ui:param name="t" value="#{dealBean.dealDto}" />
+					
+ 
+					<div class="col-lg-8 col-md-8 col-sm-8">
+					<!-- 1 -->
+						<div class="form-group">
+							<label for="" style="padding-left: 32px;" class="col-lg-3 col-md-6 control-label label-align">
+								<h:outputText
+									value="#{dealBean.contentType eq 'BUYOUT' ?'Deal Name':dealBean.contentType eq 'ADVERTISEMENT'?'Ad Name':'Promo Name' }" />
+							</label>
+
+							<div class="col-lg-9 ">
+								<p:inputText id="Dealname" styleClass="form-control"
+									value="#{t.name}" tabindex="1" required="true" minlength="4"
+									maxlength="45" onkeydown=" return deal(event)"
+									onkeyup="dealNameLengthChk(this)"
+									requiredMessage="#{msg['validate.dealname']}"
+									validatorMessage="#{msg['validate.dealname']}">
+									<p:watermark for="Dealname" value="4 to 45 characters"
+										id="Dealname-watermark" />
+									<f:validateRegex pattern="#{val['pattern.dealname']}"></f:validateRegex>
+								</p:inputText>
+
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="Dealname" />
+							</div>
+						</div> 
+					<div class="form-group">
+							<label for=""  style="padding-left: 32px;" class="col-lg-3  control-label label-align">
+								<h:outputText
+									value="#{dealBean.contentType eq 'BUYOUT' ?'Deal Details':dealBean.contentType eq 'ADVERTISEMENT'?'Ad Details':'Promo Details' }" />
+							</label>
+							<div class="col-lg-9 ">
+								<p:inputTextarea styleClass="form-control" id="deal-detail"
+									value="#{t.details}" onkeydown=" return deal(event)"
+									onkeyup="dealDetailLengthChk(this)" minlength="4"
+									maxlength="150" requiredMessage="#{msg['validate.dealdetail']}"
+									validatorMessage="#{msg['validate.dealdetail']}" tabindex="2"
+									required="true">
+									<f:validateLength minimum="4" maximum="150" />
+									<f:validateRegex pattern="#{val['pattern.dealdetail']}"></f:validateRegex>
+									<p:watermark for="deal-detail" value="4 to 150 characters"
+										id="deal-detail-watermark" />
+								</p:inputTextarea>
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="deal-detail" />
+							</div>
+						</div>
+						<!-- Merchant Detail Text -->
+						<div class="form-group">
+							<label for="" style="padding-left: 32px;"
+								class="col-lg-3  control-label label-align"> <h:outputText
+									value="Detail Text" />
+							</label>
+							<div class="col-lg-9 ">
+								<p:inputTextarea styleClass="form-control" id="deal-details2"
+									value="#{t.detailText}" onkeydown=" return deal(event)"
+									onkeyup="dealDetailLengthChk(this)" minlength="4"
+									maxlength="150" requiredMessage="DetailText must be between 4 and 150 characters}"
+									validatorMessage="DetailText must be between 4 and 150 characters" tabindex="2"
+									required="false">
+									<f:validateLength minimum="4" maximum="150" />
+									<f:validateRegex pattern="#{val['pattern.dealdetail']}"></f:validateRegex>
+									<p:watermark for="deal-details2" value="4 to 150 characters"
+										id="deal-detail-watermarks" />
+								</p:inputTextarea>
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="deal-details2" />
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-6 col-sm-6">
+						
+						<!-- 3 -->
+						<p:outputPanel id="contenttype" rendered="true">
+
+							<p:outputPanel id="buyoutId"
+								rendered="#{(dealBean.contentType eq 'BUYOUT')}">
+								<div class="form-group">
+									<label for=""
+										class="col-lg-6 6 control-label  label-align">Deal Template</label>
+									<div class="col-lg-6">
+										<h:selectOneMenu styleClass="form-control"
+											value="#{t.dealTemplate}" tabindex="4" required="true">
+											<f:selectItem itemLabel="FULL_IMAGE" itemValue="FULL_IMAGE" />
+											<f:selectItem itemLabel="NORMAL" itemValue="NORMAL" />
+										</h:selectOneMenu>
+									</div>
+								</div>
+							</p:outputPanel>
+							<p:outputPanel id="promotionId"
+								rendered="#{(dealBean.contentType eq 'PROMOTION')}">
+								<div class="form-group">
+									<label for=""
+										class="col-lg-6  control-label  label-align">Coupon
+										Code</label>
+									<div class="col-lg-6 ">
+										<p:inputText styleClass="form-control" id="coupon-code"
+											value="#{t.couponcode}" tabindex="5" minlength="4"
+											maxlength="45"
+											requiredMessage="#{msg['validate.couponcode']}"
+											validatorMessage="#{msg['validate.couponcode']}"
+											required="true">
+											<p:watermark for="coupon-code" value="coupon code"
+												id="coupon-watermark" />
+											<f:validateRegex pattern="#{val['pattern.couponCode']}"></f:validateRegex>
+										</p:inputText>
+									</div>
+									<div class="col-lg-12 col-md-12">
+										<p:message for="coupon-code" />
+									</div>
+								</div>
+							</p:outputPanel>
+						</p:outputPanel>
+
+
+						<div class="form-group">
+							<label for=""
+								class="col-lg-6  control-label  label-align">Food
+								Category</label>
+							<div class="col-lg-6 ">
+								<h:selectOneMenu id="foodcategory" styleClass="form-control" converter="gec" 
+									value="#{dealBean.selectedFCAT}" tabindex="7" required="true">
+									<f:selectItems value="#{dealBean.foodCATS}" var="it"
+										itemLabel="#{it.name}" itemValue="#{it}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="foodcategory" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="" class="col-lg-6 control-label label-align">Validity
+								Start Date</label>
+							<div class="col-lg-6 ">
+								<p:calendar id="startDate" value="#{dealBean.startDate}"
+									pattern="dd-MM-yyyy HH:mm" showOn="button" tabindex="9" 
+									requiredMessage="#{msg['validate.dealDate']}"
+									validatorMessage="#{msg['validate.dealDate']}" required="true" />
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="startDate" />
+							</div>
+						</div> 
+						<p:outputPanel id="DealType-l-panel"
+							rendered="#{(dealBean.contentType eq 'BUYOUT')}">
+							<div class="form-group">
+								<label for=""
+									class="col-lg-6  control-label  label-align">Opening
+									Qty</label>
+								<div class="col-lg-6 ">
+									<p:inputText styleClass="form-control" id="openingquantity"
+										onkeydown=" return checkNum(event);"
+										onkeyup="phoneCheck(this);"
+										value="#{dealBean.dealDto.openingQuantity}" tabindex="13"
+										requiredMessage="#{msg['validate.openingQuantity']}"
+										validatorMessage="#{msg['validate.openingQuantity']}"
+										required="true" />
+								</div>
+								<div class="col-lg-12 col-md-12">
+									<p:message for="openingquantity" />
+								</div>
+							</div>
+
+							<div class="form-group"> 
+								<label for=""
+									class="col-lg-6  control-label  label-align">Deal
+									Price</label> 
+								<div class="col-lg-6 ">
+									<p:inputText styleClass="form-control right-alignText" id="deal-price"
+										onkeydown=" return checkPrice(event);" value="#{t.dealPrice}"  tabindex="15" maxlength="8"
+										requiredMessage="#{msg['validate.dealprice']}" validatorMessage="#{msg['validate.dealprice']}"
+										required="true" disabled="#{t.originalPrice  == null}">
+										<p:ajax event="keyup" update="deal-discount globalmessages" listener="#{dealBean.discountEvent}" />
+									</p:inputText> 
+								</div>
+								<div class="col-lg-12 col-md-12">
+									<p:message for="deal-price" />
+								</div>
+							</div>
+							<p:outputPanel id="DeliveryMtd" rendered="true">
+								<div class="form-group">
+									<label for=""
+										class="col-lg-6  control-label label-align">Delivery Method</label>
+									<div class="col-lg-6 ">
+										<p:selectManyCheckbox id="grid" value="#{dealBean.selectedDeliveryType}" layout="grid" columns="1" converter="gec" tabindex="17">
+								            <f:selectItems value="#{dealBean.dealDeliveryType}" var="it" itemLabel="#{it.type}" itemValue="#{it}" />
+								           
+								         </p:selectManyCheckbox>
+									</div>
+								</div>
+								 
+								
+								<div id="DELIVERY_DIV" style="display:none;">
+									<div class="form-group">
+										<label for="" class="col-lg-6  control-label label-align">Delivery Time</label>
+										<div class="col-lg-6 ">  
+										    	<h:selectOneMenu id="deliveryTime" styleClass="form-control"  value="#{t.deliveryTime}" tabindex="18">
+										 			<f:selectItem itemLabel="15 Minutes" itemValue="15 Minutes" />
+											            <f:selectItem itemLabel="30 Minutes" itemValue="30 Minutes" />
+											            <f:selectItem itemLabel="45 Minutes" itemValue="45 Minutes" />
+											            <f:selectItem itemLabel="1 Hour" itemValue="1 Hour" />
+											            <f:selectItem itemLabel="2 Hours" itemValue="2 Hours" />
+											            <f:selectItem itemLabel="3 Hours" itemValue="3 Hours" />
+											            <f:selectItem itemLabel="4 Hours" itemValue="4 Hours" />
+											            <f:selectItem itemLabel="5 Hours" itemValue="5 Hours" />
+												</h:selectOneMenu>
+										</div>
+										<div class="col-lg-12 col-md-12">
+											<p:message for="deliveryTime" />
+										</div>
+									</div>
+
+									<div class="form-group"> 
+										<label for=""
+											class="col-lg-6  control-label label-align">Delivery
+											Charge</label> 
+										<div class="col-lg-6 ">
+											<p:inputText styleClass="form-control  right-alignText" id="deliveryCharge"
+												value="#{t.deliveryCharge}"
+												onkeydown=" return checkPrice(event);" maxlength="8"
+												tabindex="21" />
+										</div>
+										<div class="col-lg-12 col-md-12">
+											<p:message for="deliveryCharge" />
+										</div>
+									</div>
+
+								</div>
+							</p:outputPanel>
+						</p:outputPanel>
+						
+					</div>
+
+					<!-- End of First half in UI -->
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<!-- 2 -->
+
+						<!-- 4 -->
+						<div class="form-group"
+							style="padding-top: 0px; ">
+							<label for="" class="col-lg-6 control-label label-align">Food
+								Type</label>
+							<div class="col-lg-6 " style="padding-top: 5px;padding-bottom: 3px;">
+								<p:selectOneRadio id="food-type" value="#{t.foodType}"
+									tabindex="6" requiredMessage="#{msg['validate.foodtype']}"
+									validatorMessage="#{msg['validate.foodtype']}" required="true">
+									<f:selectItem itemLabel="Veg" itemValue="VEG" />
+									<f:selectItem itemLabel="Non-Veg" itemValue="NON_VEG" />
+								</p:selectOneRadio>
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="food-type" />
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<label for="" class="col-lg-6  control-label label-align">Cuisine</label>
+							<div class="col-lg-6 ">
+								<h:selectOneMenu styleClass="form-control" converter="gec" 
+									value="#{dealBean.selectedCUISINE}" tabindex="8">
+									<f:selectItems value="#{dealBean.cusines}"
+										var="it" itemLabel="#{it.name}" itemValue="#{it}" />
+								</h:selectOneMenu>
+
+							</div>
+						</div>
+
+						<div class="form-group"> 
+							<label for="" class="col-lg-6  control-label label-align">Validity
+								End Date</label> 
+							<div class="col-lg-6 ">
+								<p:calendar id="validityEndDate" value="#{dealBean.endDate}"
+									mindate="#{dealBean.startDate}" pattern="dd-MM-yyyy HH:mm"
+									showOn="button" tabindex="10"
+									requiredMessage="#{msg['validate.dealDate']}"
+									validatorMessage="#{msg['validate.dealDate']}" required="true" />
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="validityEndDate" />
+							</div>
+						</div>
+						<div class="form-group"> 
+							<label for="" class="col-lg-6 col-md-6 control-label label-align">Original Price</label>
+ 							<div class="col-lg-6 ">
+								<p:inputText styleClass="form-control right-alignText"   id="original-price"
+									onkeydown=" return checkPrice(event);"
+									value="#{t.originalPrice}" tabindex="14" maxlength="8"
+									requiredMessage="#{msg['validate.originalprice']}"
+									validatorMessage="#{msg['validate.originalprice']}"
+									required="true" >
+									<p:ajax event="keyup" update="deal-price" listener="#{dealBean.originalPriceEvent}" />
+									</p:inputText>
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="original-price" />
+							</div>
+						</div>
+						<p:outputPanel id="DealType-r-panel"
+							rendered="#{(dealBean.contentType eq 'BUYOUT')}">
+							<div class="form-group">
+								<label for=""
+									class="col-lg-6  control-label label-align">Deal Discount %</label>
+								<div class="col-lg-6 ">
+									<p:inputText styleClass="form-control right-alignText" id="deal-discount" 
+										value="#{t.dealDiscountPercent}" maxlength="2" tabindex="16"  disabled="true"/>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="" class="col-lg-6  control-label label-align">Redeem Allowed</label>
+								<div class="col-lg-6 ">
+									<h:selectOneMenu styleClass="form-control" id="reedem"
+										value="#{t.reedem}" tabindex="18">
+										<f:selectItem itemLabel="Loyality Points"
+											itemValue="LOYALTY" />
+										<f:selectItem itemLabel="Other Payments"
+											itemValue="PAYMENTS" />
+									</h:selectOneMenu>
+								</div>
+							</div>
+
+						</p:outputPanel>
+						<div class="form-group">
+							<label for="" class="col-lg-6  control-label label-align">Status</label>
+							<div class="col-lg-6 ">
+								<h:selectOneMenu styleClass="form-control" id="Status" value="#{t.status}" tabindex="20">
+									<f:selectItem itemLabel="Active" itemValue="ACTIVE" />
+									<f:selectItem itemLabel="Blocked" itemValue="BLOCKED" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<p:outputPanel id="DealEditOutlet" rendered="#{(dealBean.action eq 'EDIT')}">
+							<div class="form-group">  
+								<label for="" class="col-lg-6  control-label label-align">Outlet</label> 
+								<div class="col-lg-6 ">
+								<p:inputText styleClass="form-control" id="deal-OUTLET" 
+										value="#{t.merchantbranch.branchName}" maxlength="2" tabindex="22"  disabled="true"/>
+			 
+								</div>
+							</div> 
+						</p:outputPanel>
+						
+						<p:outputPanel id="DealAddOutlet" rendered="#{(dealBean.action eq 'ADD')}">
+							<div class="col-lg-12 col-md-12">
+								<p:pickList id="picklistID" value="#{dealBean.pickBranch}" var="bra" required="true"
+									itemLabel="#{bra.branchName}" itemValue="#{bra}" converter="gec" requiredMessage="Please choose atleast one Outlet" >
+									<f:facet name="sourceCaption">Available</f:facet>
+									<f:facet name="targetCaption">Selected</f:facet>
+								</p:pickList>
+							</div>
+							<div class="col-lg-12 col-md-12">
+									<p:message for="picklistID" />
+								</div>
+						</p:outputPanel>
+						
+						
+					</div>
+				
+</div>
+					<!-- hkukh -->
+					<div class="col-lg-4 col-md-4 col-sm-4">
+						<p:outputPanel id="TEMPIMAGE">
+							<div class="image_upload_box">
+								<p:outputPanel id="TEMPIMAGE_MAIN">
+									<p:outputPanel rendered="#{dealBean.display}">
+										<img src="#{request.contextPath}/images/placeholder.png" width="100%" height="349px;" />
+									</p:outputPanel>
+									<p:outputPanel rendered="#{!dealBean.display}">
+										<img src="data:image/jpeg;base64,#{dealBean.imageString}" width="100%" height="349px;" />
+									</p:outputPanel>
+								</p:outputPanel>
+							</div>
+							<div class="form-group" style="clear: both !important;">
+							
+									<p style="font-size: 12px;padding-left:20px;"><span style="font: italic bold 12px/30px Georgia, serif;">Note:</span> Image dimension should be greater than #{dealBean.imageWidthXHeight}</p>
+									<p style="font-size: 12px;padding-left:20px;">File size should be less than #{dealBean.imageFileSize}</p>
+								 
+								<center> 
+								 	<p:fileUpload id="fupload" value="#{dealBean.file}"
+										required="true" auto="true" multiple="false"
+										immediate="false" allowTypes="/(\.|\/)(jpe?g|png)$/"  description="Select Images" 
+										fileUploadListener="#{dealBean.myFileUpload}" label=""  
+										update="TEMPIMAGE_MAIN globalmessages">
+									</p:fileUpload> 
+								</center>
+							</div>
+						</p:outputPanel>
+					</div>
+				</div>
+				<div class="row" style="margin-top:-56px !important;">
+					<div class="saveandcancel" >
+						<p:commandButton  styleClass="btn btn-danger red_save_button buttonsss" 
+							value="Save" ajax="false"  action="#{dealBean.addDeals}" />
+
+						<p:commandButton styleClass="btn btn-danger red_save_button buttonsss"
+							immediate="true" value="Cancel" ajax="false"
+							action="#{dealBean.showDeals}" />
+					</div>
+				</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

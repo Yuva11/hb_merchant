@@ -1,0 +1,110 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+
+	<display-name>HBMerchant</display-name>
+	<welcome-file-list>
+		<welcome-file>login.xhtml</welcome-file>
+	</welcome-file-list>
+	 
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+	 
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring.xml,/WEB-INF/security.xml</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	  
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener> 
+	
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+ 
+	<listener>
+		<listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+	</listener>
+	
+	<listener>
+    	<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+	</listener>
+		
+	<filter>
+  		<filter-name>springSecurityFilterChain</filter-name>
+  		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+ 	</filter>  
+ 	
+ 	<filter-mapping>
+  		<filter-name>springSecurityFilterChain</filter-name>
+  		<url-pattern>/*</url-pattern>
+  		<dispatcher>FORWARD</dispatcher>
+  		<dispatcher>REQUEST</dispatcher>
+ 	</filter-mapping>  
+ 	
+	<filter>
+  		<filter-name>logFilter</filter-name>
+  		<filter-class>com.finateltechhbm.servlet.LogFilter</filter-class>
+ 	</filter> 
+ 	
+ 	<filter-mapping>
+  		 <filter-name>logFilter</filter-name>
+  		 <url-pattern>*</url-pattern>
+  	</filter-mapping>
+  	
+	<servlet>
+	    <servlet-name>Faces Servlet</servlet-name>
+	    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+	    <load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>Faces Servlet</servlet-name>
+	    <url-pattern>*.jsf</url-pattern>
+	    <url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping> 
+	
+	 <filter>
+	    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+	    <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+	    <filter-name>PrimeFaces FileUpload Filter</filter-name>
+	    <servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+	
+	<context-param>
+	    <param-name>primefaces.UPLOADER</param-name>
+	    <param-value>commons</param-value>
+	</context-param>
+	
+	
+	<servlet> 
+		<servlet-name>ExceptionHandler</servlet-name>
+		<servlet-class>com.finateltechhbm.servlet.ExceptionHandler</servlet-class>
+	</servlet> 
+	
+	<servlet-mapping>
+		<servlet-name>ExceptionHandler</servlet-name>
+		<url-pattern>/exception</url-pattern>
+	</servlet-mapping> 
+
+	
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/login.xhtml</location>
+	</error-page>
+	
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/exception</location>
+	</error-page>	
+</web-app>

@@ -1,0 +1,86 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'groovy'
+apply plugin: 'eclipse-wtp'
+
+[sourceSets.main].each {
+	// compile java and groovy file at same time.
+	it.groovy.srcDirs += it.java.srcDirs
+	// disable java compilation
+	it.java.srcDirs = []
+}
+
+group = 'com.finateltech'
+version = '1.0'
+
+description = "HBMerchant"
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+
+def springVersion = '4.0.2.RELEASE'
+def slf4jVersion = '1.7.5'
+
+
+repositories {
+  mavenCentral()
+  mavenLocal()
+ 
+}
+
+dependencies {
+
+  compile 'org.apache.poi:poi-ooxml:3.9'
+  compile 'org.codehaus.groovy:groovy-all:2.2.2'
+  compile 'javassist:javassist:3.12.1.GA'
+  compile 'org.springframework:spring-core:' + springVersion
+  compile 'org.springframework:spring-web:' + springVersion
+  compile 'org.springframework:spring-aop:' + springVersion
+  compile 'org.springframework:spring-tx:' + springVersion
+  compile 'commons-lang:commons-lang:2.6'
+
+  compile 'org.aspectj:aspectjrt:1.7.1'
+  compile 'org.aspectj:aspectjweaver:1.7.1'
+
+  compile 'com.fasterxml.jackson.core:jackson-core:2.4.1'
+  compile 'com.fasterxml.jackson.core:jackson-databind:2.4.1'
+  compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.1'
+  
+  compile 'com.sun.faces:jsf-api:2.2.2'
+  compile 'com.sun.faces:jsf-impl:2.2.2'
+  compile 'org.primefaces:primefaces:5.0'
+  compile 'com.sun.el:el-ri:1.0'  
+  compile 'ch.qos.logback:logback-classic:1.1.2'
+  compile 'jstl:jstl:1.2' 
+  
+  compile 'javax.inject:javax.inject:1'
+
+ 
+  compile 'org.slf4j:slf4j-api:' + slf4jVersion
+  compile 'org.slf4j:slf4j-log4j12:1.7.5'
+  compile 'log4j:log4j:1.2.17'
+
+  compile 'org.apache.commons:commons-lang3:3.1'
+  compile 'commons-fileupload:commons-fileupload:1.3'
+  compile 'commons-io:commons-io:2.4'
+  compile 'javax.validation:validation-api:1.0.0.GA'
+  compile 'org.hibernate:hibernate-validator:5.1.2.Final'
+  compile 'org.apache.sanselan:sanselan:0.97-incubator'
+
+
+
+  compile 'org.projectlombok:lombok:0.11.6'
+  compile 'javax.servlet:javax.servlet-api:3.0.1'
+	compile group: "org.springframework.security", name: "spring-security-web", version: "3.2.5.RELEASE"
+	compile group: "org.springframework.security", name: "spring-security-config", version: "3.2.5.RELEASE"
+  
+  testCompile 'junit:junit:4.11'
+}
+
+war{
+ archiveName = 'HBMerchant.war'
+ destinationDir = file('webapps')
+}
+sourceSets.main.java.srcDirs = []
+sourceSets.main.groovy.srcDir 'src/main/java'

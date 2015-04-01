@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/p/layout.xhtml">
+	<ui:define name="content">
+	 <script>  
+	 $(document).ready(function(){ 
+		 $("#hh").hide();
+		   $('#City').click(function(){
+			   $("#hh").click();
+	        });
+		}); 
+	 </script>
+		<div class="creation_box">
+			<h:form id="deal" prependId="false" enctype="multipart/form-data">
+				<div class="col-lg-12 col-md-12">
+					<p:messages id="globalmessages" globalOnly="true" showDetail="false" />
+				</div> 
+				
+				
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				<div class="row field_row">  
+				<div  >
+				<div class="col-lg-4 col-md-3 col-sm-3"> 
+				
+				<div class="form-group">
+					<label for="" class="col-lg-3  control-label label-align">City : </label>
+					<div class="col-lg-9 ">
+						<h:selectOneMenu styleClass="form-control" id="City" value="#{contentBean.city}"  converter="gec">
+							<p:ajax event="change" listener="#{contentBean.onCityChange}" update="selectAllCheckBox,grid" />
+				                <f:selectItem itemLabel="Select City" itemValue="" noSelectionOption="true" />
+				                <f:selectItems var="at" itemLabel="#{at.name}" itemValue="#{at.name}"  value="#{contentBean.cities}"/>
+						</h:selectOneMenu> 
+					</div>
+				</div> 
+				
+				</div>
+				<div class="col-lg-6 col-md-12 col-sm-12">
+				</div>
+				<p:outputPanel>
+				<div class="col-lg-12 col-md-12 col-sm-12" style="min-height:311px !important;">
+					 <div style="padding:20px"  id="locationsDIV" >
+					 	<h:panelGrid  id="selectAllCheckBox"  columns="2" style="border:none !important;"> 
+						<label for="" class="col-lg-3  control-label label-align">Locations </label> 
+						  <p:selectBooleanCheckbox  value="#{contentBean.selectedAll}">
+				            <p:ajax update="grid" listener="#{contentBean.onSelectAll}" />
+				        </p:selectBooleanCheckbox>
+						</h:panelGrid>
+						
+							<p:selectManyCheckbox id="grid" value="#{contentBean.selectedLocations}" layout="grid" columns="3" converter="gec">
+							 	<f:selectItems value="#{contentBean.allLocations}" var="it" itemLabel="#{it.name}" itemValue="#{it}"  />
+							 </p:selectManyCheckbox> 
+					</div>
+				</div>
+				</p:outputPanel>
+				</div>
+				</div>
+			</div>
+			
+			
+					<div class="row">
+				
+				<div class="col-lg-12 col-md-12 col-sm-12">
+				<p:commandButton value="Save"  id="hh" 
+ 						 action="#{contentBean.setTemp}" /> 
+					<center style="margin-bottom:10px; "> 
+ 						<p:commandButton styleClass="btn btn-danger red_save_button buttonsss" value="Save" 
+ 							ajax="false" action="#{contentBean.addLocationsForAd}" />
+						<p:commandButton rendered="true"
+							styleClass="btn btn-danger red_save_button buttonsss"
+							immediate="true" value="Cancel" ajax="false"
+							action="#{contentBean.showContents}" />
+					</center>
+					</div>
+				</div>
+			
+				
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/p/layout.xhtml">
+	<ui:define name="content">
+
+	<h:form onkeypress="if (event.keyCode == 13) { document.getElementById('enterKey').click(); return false; }" id="viewdeals" prependId="false">
+		<p:growl/>	
+				<div class="row"> 
+				
+					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+						<div class="login_serch_box">
+							<div class="input-group">
+							<h:inputText class="form-control" id="txtsrch" value="#{dealBean.keyWord}" tabindex="1"/>
+                            <p:watermark for="txtsrch" value="Search by Name / Status"/>
+								<div class="input-group-btn"> 
+									<h:commandLink id="enterKey" class="btn btn-default btn-default_color-bg"  action="#{dealBean.searchByKeyWord}">
+										<i class="glyphicon glyphicon-search"></i>
+									</h:commandLink> 
+								</div>
+							</div>
+						</div>
+					</div> 
+					
+
+					<div class="col-lg-7 col-md-8 col-sm-8" style="padding-top:6px !important;">
+						<div class="col-lg-5 col-md-4 col-sm-12 ">
+						<p:calendar id="ssstartDate" value="#{dealBean.searchDealDTO.startDate}"
+										pattern="dd-MM-yyyy HH:mm" showOn="button" />
+										<p:watermark for="ssstartDate" value="Search start date"/>
+						</div>
+						<div class="col-lg-5 col-md-4 col-sm-12 ">
+						<p:calendar id="ssEndDate" value="#{dealBean.searchDealDTO.endDate}"
+										pattern="dd-MM-yyyy HH:mm"  showOn="button"  />
+										<p:watermark for="ssEndDate" value="Search end date"/>
+						</div>
+						<div class="col-lg-2 col-md-4 col-sm-12 ">
+							<h:commandLink styleClass="btn btn-danger red_save_button buttonsss" value="Search By Date"  action="#{dealBean.searchDeals}" > </h:commandLink>
+							
+						</div>
+					</div>
+					<div class="col-lg-2 col-md-4 col-sm-4" >
+					<div class="add_button pull-right"> 
+						  <h:commandLink   action="#{dealBean.showAdd}" immediate="true" > <img src="#{request.contextPath}/images/add-button.png" /> </h:commandLink> 
+					</div>
+					
+					</div>
+
+				</div> 	
+	<div class=" table_box">
+		<div class="table table-responsive">
+			<p:dataTable value="#{dealBean.dealDtoList}" var="it"
+				paginator="true" rows="10" paginatorPosition="bottom"
+				paginatorAlwaysVisible="false" rowIndexVar="idx"  widgetVar="dealTable"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="20,50,200,500"  >
+
+				<p:column headerText="SI.No" styleClass="ftj-center" style="width:70px;">
+					<h:outputText value="#{idx+1}" />
+				</p:column>
+				
+				<p:column headerText="#{dealBean.contentType eq 'BUYOUT' ?'Deal Name &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;':'Coupon Name' }" styleClass="ftj-center"  sortBy="#{it.name}" >
+					<h:outputText value="#{it.name}" />
+				</p:column>
+				<p:column headerText="#{dealBean.contentType eq 'BUYOUT' ?'Deal Image':'Coupon Image' }" >
+					<img style="width:76px;height:73px;" src="#{profileBean.path}/images/merchant/deal/#{profileBean.merchantId}_#{it.id}.png" />
+				</p:column>
+				<p:column headerText="Outlet" styleClass="ftj-center"  sortBy="#{it.merchantbranch.branchName}" >
+					<h:outputText value="#{it.merchantbranch.branchName}" />
+				</p:column>
+				<p:column headerText="Original Price" rendered="#{dealBean.contentType eq 'BUYOUT'}" sortBy="#{it.originalPrice}"  >
+					<p style="text-align:right !important;">
+						<h:outputText value="#{it.originalPrice}" > <f:convertNumber pattern="#0.00"  /> </h:outputText>
+					</p>
+				</p:column>
+
+				<p:column headerText="Deal Price  &nbsp; &nbsp; &nbsp; &nbsp;" rendered="#{dealBean.contentType eq 'BUYOUT'}" sortBy="#{it.dealPrice}"  >
+					<p style="text-align:right !important;">
+						<h:outputText value="#{it.dealPrice}" > <f:convertNumber pattern="#0.00"  /></h:outputText>
+					</p>
+				</p:column>
+
+				<p:column headerText="Deal Discount %" rendered="#{dealBean.contentType eq 'BUYOUT'}" sortBy="#{it.dealDiscountPercent}" >
+					<p style="text-align:right !important;">
+						<h:outputText value="#{it.dealDiscountPercent}" ><f:convertNumber pattern="#0"  /></h:outputText>
+					</p>
+				</p:column>
+				<p:column headerText="Validity Start Date" sortBy="#{it.startDate}" >
+					<h:outputText value="#{it.startDate}" converter="SDC"> 
+					</h:outputText> 
+				</p:column>
+				<p:column headerText="Validity End Date" sortBy="#{it.endDate}" >
+					<h:outputText value="#{it.endDate}"  converter="SDC"> 
+					</h:outputText> 
+				</p:column>
+				<p:column headerText="Opening Qty" rendered="#{dealBean.contentType eq 'BUYOUT'}" sortBy="#{it.openingQuantity}" >
+				<p style="text-align:right !important;">
+					<h:outputText value="#{it.openingQuantity}" />
+					</p>
+				</p:column>  
+				<p:column headerText="Status  &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp;" styleClass="ftj-center" sortBy="#{it.status}" >
+						<h:outputText value="#{it.status}"></h:outputText> 
+					</p:column> 
+				<p:column headerText="Action"> 
+					<h:commandLink action="#{dealBean.showEdit}" id="Edit">
+						<img src="#{request.contextPath}/images/edit-small-icon.png" title="Edit" alt="Edit" border="0" />
+						
+						<f:setPropertyActionListener target="#{dealBean.selectedDeal}"  converter="gec" value="#{it}"/>
+					</h:commandLink>
+					<p:spacer width="5"/> 
+					<p:commandLink  oncomplete="PF('DeleteConfirm').show()"  id="Delete">
+						<img src="#{request.contextPath}/images/delete-small-icon.png" title="Delete" alt="Delete"  border="0" />
+						<f:setPropertyActionListener target="#{dealBean.dealId}" value="#{it.id}"/>
+				  	</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</div>
+		
+		</div>
+		</h:form>
+		<p:dialog header="#{dealBean.contentType eq 'BUYOUT' ?'Delete Deal Confirmation':dealBean.contentType eq 'ADVERTISEMENT'?'Delete Ad Confirmation':'Delete Coupon Confirmation' }"  draggable="false" modal="true"
+			closable="true" width="390" widgetVar="DeleteConfirm" showEffect="slide" hideEffect="slide" closeOnEscape="true"
+			resizable="false">
+			<h:form id="DLGG"> 
+			
+				<p:spacer width="5px" height="43px;"/>
+				<h:outputText value="#{dealBean.contentType eq 'BUYOUT' ?'Do you want to delete this Deal?':dealBean.contentType eq 'ADVERTISEMENT'?'Do you want to delete this Ad?':'Do you want to delete this Coupon?' }"  />
+				<br/> 
+				<div style="float:  right;">
+					<p:commandButton ajax="false" value="Yes" style ="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important;" action="#{dealBean.delete}" >
+					</p:commandButton>
+					<p:spacer width="5px" />
+					<p:commandButton value="No"  style ="color:#fff !important;background:#616161 !important;box-shadow:none !important;border: medium none !important;" oncomplete="PF('DeleteConfirm').hide()" />
+					<p:spacer width="0px" />
+				</div>
+			</h:form>
+		</p:dialog>
+</ui:define>
+</ui:composition>

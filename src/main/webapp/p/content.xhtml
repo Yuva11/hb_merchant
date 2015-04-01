@@ -1,0 +1,356 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" template="/p/layout.xhtml">
+	<ui:define name="content">
+		
+		<div class="creation_box">
+			<h:form id="deal" prependId="false" enctype="multipart/form-data">
+				<div class="col-lg-12 col-md-12">
+					<p:messages id="globalmessages" globalOnly="true" showDetail="false" />
+				</div>
+				
+			<div class="row field_row">  
+			<div class="col-lg-12 col-md-12 col-sm-12">
+			<p:outputPanel id="MAINPANEL" rendered="true">
+				 <p:focus context="MAINPANEL"/>
+				 
+				 
+				<div class="col-lg-5 col-md-5 col-sm-5"> 
+				
+				<div class="form-group">
+				
+					<label class="col-lg-5 ">Ad Name</label>
+					<div class="col-lg-7 ">
+						<p:inputText styleClass="form-control" id="adName"  minlength="3"  maxlength="25" 
+						 tabindex="1" value="#{contentBean.dealDTO.name}" required="true"
+						 requiredMessage="Name should not be empty" valueChangeListener="#{contentBean.adNameChangeListener}"
+						 validatorMessage="Name must be between 3 to 50 Characters">    
+						 <p:ajax event="change" listener="#{contentBean.adNameChangeListener}" />
+						<f:validateRegex pattern="#{val['pattern.contentThumbnailText']}"></f:validateRegex>
+						</p:inputText>
+					</div>
+					
+					<div class="col-lg-12 col-md-12">
+						<p:message for="adName" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-5 ">Content Type</label>
+						<div class="col-lg-7 ">
+							<h:selectOneMenu styleClass="form-control" value="#{contentBean.dealDTO.contentType}" tabindex="2" required="true"> 
+								<f:selectItem itemLabel="PROMOTIONAL" itemValue="PROMOTIONAL" />
+								<f:selectItem itemLabel="NON_PROMOTIONAL" itemValue="NON_PROMOTIONAL" />
+							</h:selectOneMenu>
+						</div>
+				</div> 
+				<p:outputPanel id="ContentTypes" rendered="true">
+				<div class="form-group">
+					<label class="col-lg-5 ">Content Template</label>
+						<div class="col-lg-7 ">
+							<h:selectOneMenu styleClass="form-control" value="#{contentBean.dealDTO.contentTemplate}" tabindex="3" required="true"> 
+								<f:selectItem itemLabel="Text Only" itemValue="TEXT_ONLY" /> 
+								<f:selectItem itemLabel="Image Only" itemValue="IMAGE_ONLY" />
+								<f:selectItem itemLabel="Image &amp; Text" itemValue="IMAGE_AND_TEXT" />
+								<f:selectItem itemLabel="Video &amp; Text" itemValue="VIDEO_AND_TEXT" />
+								<p:ajax event="change" process="@this" update="MAINPANEL" />
+							</h:selectOneMenu>
+						</div>
+				</div>
+				<div class="form-group">
+					<label class="col-lg-5 ">Tile Size</label>
+						<div class="col-lg-7 ">
+							<h:selectOneMenu styleClass="form-control" value="#{contentBean.dealDTO.tileSize}" tabindex="4" required="true"> 
+								<!-- <f:selectItem itemLabel="SMALL TILE" itemValue="1" /> -->
+								<f:selectItem itemLabel="LARGE TILE" itemValue="2" />
+							</h:selectOneMenu>
+						</div>
+				</div> 
+					<p:outputPanel id="NotTextTxtPanel" rendered="#{contentBean.dealDTO.contentTemplate eq 'VIDEO_AND_TEXT'}">
+						<div class="form-group">
+							<label class="col-lg-5">Thumbnail Text</label>
+							<div class="col-lg-7 ">
+								<p:inputText styleClass="form-control" id="notThumbnailText"  minlength="3"  maxlength="25" 
+								 tabindex="5" value="#{contentBean.dealDTO.thumbnailText}" required="true"
+								 requiredMessage="Thumbnail Text should not be empty"
+								 validatorMessage="Thumbnail Text must be between 3 to 50 Characters">  
+								 <p:ajax event="keyup" update="THUMBNAIL_IMAGE THUMBNAIL_TEXTONLY" listener="#{contentBean.thumbNailEvent}" />
+								
+								<f:validateRegex pattern="#{val['pattern.contentThumbnailText']}"></f:validateRegex>
+								</p:inputText>
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="thumbnailText" />
+							</div>
+						</div>
+					</p:outputPanel>
+					<p:outputPanel id="TextTxtPanel" rendered="#{contentBean.dealDTO.contentTemplate eq 'TEXT_ONLY' || contentBean.dealDTO.contentTemplate eq 'IMAGE_AND_TEXT'}">
+						<div class="form-group">
+							<label class="col-lg-5">Thumbnail Text21</label>
+							<div class="col-lg-7 ">
+								<p:inputTextarea styleClass="form-control" id="thumbnailText" style="min-height:100px !important;"  minlength="3"  maxlength="250" 
+								 tabindex="5" value="#{contentBean.dealDTO.thumbnailText}" required="true"
+								 requiredMessage="Thumbnail Text should not be empty"
+								 validatorMessage="Thumbnail Text must be between 3 to 50 Characters">  
+								 <p:ajax event="keyup" update="THUMBNAIL_IMAGE THUMBNAIL_TEXTONLY" listener="#{contentBean.thumbNailTextOnlyEvent}" />
+								
+								<f:validateRegex pattern="#{val['pattern.contentThumbnailText']}"></f:validateRegex>
+								</p:inputTextarea>
+							</div>
+							<div class="col-lg-12 col-md-12">
+								<p:message for="thumbnailText" />
+							</div>
+						</div>
+					</p:outputPanel>
+					<div class="form-group">
+						<p:outputPanel id="TextTextPanellabel" rendered="#{contentBean.dealDTO.contentTemplate ne 'IMAGE_ONLY'}">
+						<label class="col-lg-5 ">Detail Text</label>
+						 </p:outputPanel>
+						<div class="col-lg-7 ">
+						<p:outputPanel id="TextTextPanel" rendered="#{contentBean.dealDTO.contentTemplate eq 'TEXT_ONLY' || contentBean.dealDTO.contentTemplate eq 'IMAGE_AND_TEXT'}">
+						 <p:editor id="detailText" widgetVar="xxx" value="#{contentBean.dealDTO.detailText}" width="800"
+						  required="true" requiredMessage="Detail Text should not be empty" validatorMessage="Detail Text must be of more than 3 characters"> 
+						<f:validateLength  minimum="3" />
+						
+						 </p:editor>
+						 </p:outputPanel>
+						 <p:outputPanel id="NormalTextTextPanel" rendered="#{contentBean.dealDTO.contentTemplate eq 'VIDEO_AND_TEXT'}">
+						 <p:inputText styleClass="form-control" id="normaldetailText"  minlength="3"   maxlength="150" 
+						 tabindex="6" value="#{contentBean.dealDTO.detailText}" required="true"
+						 requiredMessage="Detail Text should not be empty"
+					     validatorMessage="Detail Text must be between 3 to 250 Characters">
+						 <p:ajax event="keyup" update="DETAILEDIMAGETEXTID" listener="#{contentBean.detailEvent}" />
+						 <f:validateRegex pattern="#{val['pattern.contentDetailText']}"></f:validateRegex>	
+						 </p:inputText>
+						 </p:outputPanel>
+						</div>
+					</div>
+					<div class="col-lg-12 col-md-12">
+							<p:message for="detailText" />
+						</div>
+						<div class="col-lg-12 col-md-12">
+							<p:message for="normaldetailText" />
+						</div>
+				
+				<div class="form-group">
+						<label class="col-lg-5 ">Validity Start Date</label>
+						
+						<div class="col-lg-7 "> 
+							<p:calendar id="ContentStartDate"  value="#{contentBean.startDate}"
+								pattern="dd-MM-yyyy HH:mm" showOn="button" tabindex="9"
+								mindate="#{contentBean.startDate}"
+								requiredMessage="#{msg['validate.dealDate']}"
+								validatorMessage="#{msg['validate.dealDate']}" required="true" />
+						</div>
+						
+						
+						<div class="col-lg-12 col-md-12">
+							<p:message for="ContentStartDate" />
+						</div>
+				</div>
+				<div class="form-group">
+						<label class="col-lg-5 ">Validity End Date</label>
+						<div class="col-lg-7 "> 
+							<p:calendar id="ContentEndDate" value="#{contentBean.endDate}"
+								pattern="dd-MM-yyyy HH:mm" showOn="button" tabindex="9"
+								mindate="#{contentBean.startDate}"
+								requiredMessage="#{msg['validate.dealDate']}"
+								validatorMessage="#{msg['validate.dealDate']}" required="true" />
+						</div>
+						<div class="col-lg-12 col-md-12">
+							<p:message for="ContentEndDate" />
+						</div>
+				</div> 
+					<p:outputPanel id="VideoPanel" rendered="#{contentBean.dealDTO.contentTemplate eq 'VIDEO_AND_TEXT'}">
+						<div class="form-group">
+							<label class="col-lg-5 ">Upload Video</label>
+							<div class="col-lg-7 "> 
+							<p:fileUpload id="videoupload" value="#{dealBean.image}"
+								required="true" auto="true" multiple="false"
+								immediate="false"
+								fileUploadListener="#{contentBean.videoUpload}" label=""
+								update="TEMPIMAGE_MAIN globalmessages FileName" />
+								<p style="font-size:12px;">
+									<h:outputText id="FileName"  value="#{contentBean.fileName}"  />
+									</p>
+								<p style="font-size:12px;">File size should be less than #{contentBean.videoFileSize}</p>
+							</div>
+						</div>
+					</p:outputPanel> 
+				<div class="form-group">
+					<label for="" class="col-lg-5 ">Status</label>
+					<div class="col-lg-7">
+						<h:selectOneMenu styleClass="form-control" id="Status"
+							value="#{contentBean.dealDTO.status}" tabindex="13">
+							<f:selectItem itemLabel="Active" itemValue="ACTIVE" />
+							<f:selectItem itemLabel="Blocked" itemValue="BLOCKED" />
+						</h:selectOneMenu>
+					</div>
+				</div> 								
+				
+				</p:outputPanel>
+				</div>
+				
+				
+				
+				
+				
+				<div class="col-lg-3 col-md-3 col-sm-3">
+				
+				 <p:outputPanel id="THUMBPLAYIMAGE"  rendered="#{contentBean.dealDTO.contentTemplate eq 'VIDEO_AND_TEXT'}"> 
+									<div >
+									 <img src="#{request.contextPath}/images/play.png" class="play_image1"  />
+									</div>
+								</p:outputPanel><p:outputPanel id="THUMBNAIL_IMAGE" rendered="#{contentBean.dealDTO.contentTemplate ne 'TEXT_ONLY'}">  
+					
+					<div class="thumb_box">  
+  						 <div style="width:87%;margin: 6%; background-color:white;height: 80%">
+  						<p:outputPanel id="THUMBNAILIMAGE" rendered="#{contentBean.dealDTO.contentTemplate ne 'TEXT_ONLY'}">  
+	  						<p:outputPanel rendered="#{contentBean.thumbPlace}">
+								<img src="#{request.contextPath}/images/placeholder.png" width="100%" height="120px;" />
+							</p:outputPanel>
+							<p:outputPanel rendered="#{!contentBean.thumbPlace}">
+								<img src="data:image/jpeg;base64,#{contentBean.imageString1}" width="100%;" height="120px;" />
+							</p:outputPanel>
+								 
+						</p:outputPanel> 
+							<p:outputPanel id="ThumbTe"  rendered="#{contentBean.dealDTO.contentTemplate eq 'IMAGE_AND_TEXT' or contentBean.dealDTO.contentTemplate eq 'VIDEO_AND_TEXT'}">
+								<div class="thumb_box_filter"> 
+								<p style="padding-left:7px;">
+									<h:outputText id="PREview"  styleClass="thumbtext" value="#{contentBean.dealDTO.thumbnailText}" rendered="#{contentBean.dealDTO.contentTemplate eq 'IMAGE_AND_TEXT' or contentBean.dealDTO.contentTemplate eq 'VIDEO_AND_TEXT' }" />
+									</p> 
+								</div>
+							</p:outputPanel> 
+						</div>
+					</div>
+					<center>
+					<p style="font-size:12px;"> Note: Image dimension should be greater than #{contentBean.imageWidthXHeight} </p>
+						<p  style="font-size:12px;"> File size should be less than  #{contentBean.imageFileSize}</p>
+					<p:fileUpload id="thumbuploafgsdd" value="#{dealBean.image}"
+								required="true" auto="true" multiple="false"
+								immediate="false"
+								fileUploadListener="#{contentBean.thumbNailUpload}" label=""
+								update="THUMBNAILIMAGE globalmessages">
+							</p:fileUpload>
+							
+							</center>
+					
+					</p:outputPanel>
+					
+				</div>
+				
+				
+				
+				
+				
+				
+				<div class="col-lg-4 col-md-4 col-sm-4">
+				  <p:outputPanel id="PLAYIMAGE"  rendered="#{contentBean.dealDTO.contentTemplate eq 'VIDEO_AND_TEXT'}"> 
+									<div >
+									 <img src="#{request.contextPath}/images/play.png" class="play_image"  />
+									</div>
+								</p:outputPanel>
+					<p:outputPanel rendered="#{contentBean.dealDTO.contentTemplate ne 'TEXT_ONLY' and contentBean.dealDTO.contentTemplate ne 'IMAGE_AND_TEXT'}">
+					<div class="detail_box"> 
+						<div style="width:88%;margin: 6%; background-color:white;height: 88%">
+						 <p:outputPanel id="TEMPIMAGE_MAIN" rendered="#{contentBean.dealDTO.contentTemplate ne 'TEXT_ONLY'}"> 
+							<p:outputPanel rendered="#{contentBean.detailPlace}">
+								<img src="#{request.contextPath}/images/placeholder.png" width="100%" height="312px;" />
+							</p:outputPanel>
+							<p:outputPanel rendered="#{!contentBean.detailPlace}">
+								<img src="data:image/jpeg;base64,#{contentBean.imageString}" width="100%" height="312px" />
+							</p:outputPanel>
+							
+							 
+						</p:outputPanel>
+						
+						<p:outputPanel id="DETAILEDIMAGETEXTID" rendered="#{contentBean.dealDTO.contentTemplate ne 'TEXT_ONLY' and contentBean.dealDTO.contentTemplate ne 'IMAGE_ONLY'}">
+							<p style="text-align:center !important;padding-top:9%  !important;padding:5px;">
+								<h:outputText id="DetailTextPreview" value="#{contentBean.dealDTO.detailText}" rendered="#{contentBean.dealDTO.contentTemplate eq 'TEXT_ONLY'}" />
+							</p>
+							<p:outputPanel id="DetailTe"  rendered="#{contentBean.dealDTO.contentTemplate eq 'IMAGE_AND_TEXT' or contentBean.dealDTO.contentTemplate eq 'VIDEO_AND_TEXT'}">
+								
+								<div class="detail_box_filter"> 
+									<p style="padding-left:7px;">
+										<h:outputText id="DetailText" styleClass="thumbtext" value="#{contentBean.dealDTO.detailText}" rendered="#{contentBean.dealDTO.contentTemplate eq 'IMAGE_AND_TEXT' or contentBean.dealDTO.contentTemplate eq 'VIDEO_AND_TEXT'}" />
+									</p> 
+								</div>
+							</p:outputPanel>
+							
+						</p:outputPanel>
+						</div>
+						
+					</div>
+						<center>
+						<p style="font-size:12px;"> Note: Image dimension should be greater than #{contentBean.imageWidthXHeight} </p>
+						<p  style="font-size:12px;"> File size should be less than  #{contentBean.imageFileSize}</p>
+					<p:fileUpload id="fuploasdgfd" value="#{dealBean.image}"
+								required="true" auto="true" multiple="false"
+								immediate="false"
+								fileUploadListener="#{contentBean.myFileUpload}" label=""
+								update="TEMPIMAGE_MAIN globalmessages">
+							</p:fileUpload>
+							</center>
+					</p:outputPanel>
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+						<p:outputPanel id="THUMBNAIL_TEXTONLY" rendered="#{contentBean.dealDTO.contentTemplate eq 'TEXT_ONLY'}" >
+					<div class="col-lg-2 col-md-2 col-sm-2"> 
+				</div>
+					<div class="col-lg-10 col-md-10 col-sm-10"> 
+					<div class="thumb_box">   
+  						 <div style="width:87%;margin: 6%;height: 80%; background-color:##{profileBean.bg_color};">  
+							<p style="text-align:center !important;padding-top:5%;color:##{profileBean.text_color};font-size:#{profileBean.font_size}px;font-family:#{profileBean.font};">
+								<h:outputText id="ThumbnailTextOnlyPreview"  value="#{contentBean.thumbNailText}"  rendered="#{contentBean.dealDTO.contentTemplate eq 'TEXT_ONLY'}" />
+							</p> 
+						</div>
+					</div> 
+					
+				</div>
+				
+				
+						</p:outputPanel>
+				</div> 
+				
+				
+				 
+				</p:outputPanel>
+				
+		
+			</div>
+			</div>
+			
+			
+					<div class="row">
+				
+				<div class="col-lg-12 col-md-12 col-sm-12">
+				
+					<center style="margin-bottom:10px; ">
+						<p:commandButton rendered="true" styleClass="btn btn-danger red_save_button buttonsss"
+							value="Save" ajax="false" action="#{contentBean.submit}" />
+
+						<p:commandButton rendered="true"
+							styleClass="btn btn-danger red_save_button buttonsss"
+							immediate="true" value="Cancel" ajax="false"
+							action="#{contentBean.showContents}" />
+					</center>
+					</div>
+				</div>
+			
+				
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
